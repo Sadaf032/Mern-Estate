@@ -91,6 +91,7 @@ export default function SignUp() {
         >
           {loading ? "Signing Up..." : "Sign Up"}
         </button>
+        <OAuth/>
       </form>
       {error && (
       <p className="text-red-500 mt-5">

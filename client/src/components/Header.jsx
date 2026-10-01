@@ -1,37 +1,110 @@
-import {FaSearch} from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { useState } from "react";
+import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Header() {
-  return (
-    <header className='bg-slate-200 shadow-md'>
-        <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
-            <Link to='/'>
-                <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
-                    <span className='text-slate-500'>Sadaf</span>
-                    <span className='text-slate-700'>Estate</span>
-                </h1>
-            </Link>
-            <form className='bg-slate-100 p-3 rounded-lg flex items-center'>
-                <input type="text" placeholder='Search...' className='bg-transparent focus:outline-none w-24 sm:w-64'/>
-                <FaSearch className='text-slate-600'/>
-            </form>
-            <ul className='flex gap-4'>
-                <li className='hidden sm:inline text-slate-700 hover:underline'>
-                    <Link to='/'>Home</Link>
-                </li>
-                <li className='hidden sm:inline text-slate-700 hover:underline'>
-                    <Link to='/about'>About</Link>
-                </li>
-                <li className= 'text-slate-700 hover:underline'>
-                    <Link to='/sign-in'>Sign In</Link>
-                </li>
-                    <li className='text-slate-700 hover:underline'>
-                    <Link to='/sign-up'>Sign Up</Link>
-                </li>
-            </ul>
-        </div>
+  const { currentUser } = useSelector(
+    (state) => state.user
+  );
 
-        
+  const navigate = useNavigate();
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // ================= SEARCH INPUT =================
+
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // ================= SEARCH SUBMIT =================
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const trimmedSearch = searchTerm.trim();
+
+    if (!trimmedSearch) {
+      navigate("/search");
+      return;
+    }
+
+    navigate(
+      `/search?searchTerm=${encodeURIComponent(
+        trimmedSearch
+      )}`
+    );
+  };
+
+  return (
+    <header className="bg-slate-200 shadow-md">
+
+      <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
+
+        {/* ================= LOGO ================= */}
+
+        <Link to="/">
+          <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
+            <span className="text-slate-500">
+              Sadaf
+            </span>
+
+            <span className="text-slate-700">
+              Estate
+            </span>
+          </h1>
+        </Link>
+
+        {/* ================= SEARCH ================= */}
+
+        <form
+          onSubmit={handleSubmit}
+          className="bg-slate-100 p-3 rounded-lg flex items-center"
+        >
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={handleChange}
+            className="bg-transparent focus:outline-none w-24 sm:w-64"
+          />
+
+          <button type="submit">
+            <FaSearch className="text-slate-600" />
+          </button>
+        </form>
+
+        {/* ================= NAVIGATION ================= */}
+
+        <ul className="flex gap-4 items-center">
+
+          <li className="hidden sm:inline text-slate-700 hover:underline">
+            <Link to="/">Home</Link>
+          </li>
+
+          <li className="hidden sm:inline text-slate-700 hover:underline">
+            <Link to="/about">About</Link>
+          </li>
+
+          <li>
+            <Link to="/profile">
+              {currentUser?.photo ? (
+                <img
+                  src={currentUser.photo}
+                  alt="profile"
+                  className="w-8 h-8 rounded-full object-cover"
+                />
+              ) : (
+                <FaUserCircle className="text-3xl text-slate-600" />
+              )}
+            </Link>
+          </li>
+
+        </ul>
+
+      </div>
+
     </header>
-  )
+  );
 }

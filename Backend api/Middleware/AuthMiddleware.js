@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 
 const authMiddleware = (req, res, next) => {
   try {
-
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -18,16 +17,24 @@ const authMiddleware = (req, res, next) => {
       process.env.JWT_SECRET
     );
 
-    req.user = decoded;
+    req.user = {
+      id: decoded.id || decoded._id
+    };
+
+    if (!req.user.id) {
+      return res.status(401).json({
+        message: 'User ID not found in token'
+      });
+    }
 
     next();
 
   } catch (error) {
+    console.error('Auth error:', error);
 
     return res.status(401).json({
       message: 'Invalid or expired token'
     });
-
   }
 };
 
