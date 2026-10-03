@@ -87,23 +87,30 @@ export default function Header() {
             <Link to="/about">About</Link>
           </li>
 
-          <li>
-            <Link to="/profile">
-              {currentUser?.photo ? (
-                <img
-                  src={currentUser.photo}
-                  alt="profile"
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-              ) : (
-                <FaUserCircle className="text-3xl text-slate-600" />
-              )}
-            </Link>
-          </li>
-
-        </ul>
-
-      </div>
+        <li>
+  {currentUser ? (
+    <Link to="/profile">
+      {currentUser.photo ? (
+        <img
+          src={currentUser.photo}
+          alt="Profile"
+          className="w-8 h-8 rounded-full object-cover border border-slate-300"
+        />
+      ) : (
+        <FaUserCircle className="text-3xl text-slate-600" />
+      )}
+    </Link>
+  ) : (
+    <Link
+      to="/sign-in"
+      className="text-slate-700 hover:underline"
+    >
+      Sign In
+    </Link>
+    )}
+    </li>
+      </ul>
+    </div>
 
     </header>
   );
