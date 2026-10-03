@@ -31,11 +31,14 @@ export default function OAuth() {
 
       // Check Google profile information
       console.log("GOOGLE USER:", result.user);
-      console.log("GOOGLE PHOTO:", result.user.photoURL);
+      console.log(
+        "GOOGLE PHOTO:",
+        result.user.photoURL
+      );
 
-      // Send Google user to backend
+      // Send Google user to Railway backend
       const response = await fetch(
-        "http://localhost:3000/api/oauth/google",
+        "https://mern-estate-production-1689.up.railway.app/api/oauth/google",
         {
           method: "POST",
 
@@ -75,7 +78,6 @@ export default function OAuth() {
 
       // Go to profile
       navigate("/profile");
-
     } catch (error) {
       console.error(
         "Could not sign in with Google:",
